@@ -1,0 +1,206 @@
+<?xml version="1.0"?>
+<template
+    name="MVVM全家桶 "
+    description="一键创建MVVM单个页面所需的全部组件，结合Kotlin + Kodein"
+    format="5"
+    minApi="9"
+    minBuildApi="15"
+    revision="1">
+
+    <category value="Activity" />
+    <formfactor value="Mobile" />
+
+    <parameter
+        name="Page Name"
+        constraints="unique|nonempty"
+        default="Main"
+        help="请填写页面名,如填写 Main,会自动生成 MainActivity, MainModule 等文件"
+        id="pageName"
+        type="string" />
+
+    <parameter
+        name="Root Package Name"
+        constraints="package"
+        default="com.mycompany.myapp"
+        help="请填写你的项目包名,请认真核实此包名是否是正确的项目包名,不能包含子包,正确的格式如:com.rain.music"
+        id="packageName"
+        type="string" />
+
+
+    <parameter
+        name="Generate Activity"
+        default="true"
+        help="是否需要生成 Activity ? 不勾选则不生成"
+        id="needActivity"
+        type="boolean" />
+
+
+    <parameter
+        name="Activity Layout Name"
+        constraints="layout|nonempty"
+        default="activity_main"
+        help="Activity 创建之前需要填写 Activity 的布局名,若布局已创建就直接填写此布局名,若还没创建此布局,请勾选下面的单选框"
+        id="activityLayoutName"
+        suggest="${activityToLayout(pageName)}"
+        type="string"
+        visibility="needActivity" />
+
+
+    <parameter
+        name="Generate Activity Layout"
+        default="true"
+        help="是否需要给 Activity 生成布局? 若勾选,则使用上面的布局名给此 Activity 创建默认的布局"
+        id="generateActivityLayout"
+        type="boolean"
+        visibility="needActivity" />
+
+
+    <parameter
+        name="Ativity Package Name"
+        constraints="package"
+        help="Activity 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+        id="ativityPackageName"
+        suggest="${packageName}.view.activity"
+        type="string"
+        visibility="needActivity" />
+
+
+    <parameter
+        name="Generate Fragment"
+        default="false"
+        help="是否需要生成 Fragment ? 不勾选则不生成"
+        id="needFragment"
+        type="boolean" />
+
+
+    <parameter
+        name="Fragment Layout Name"
+        constraints="layout|nonempty"
+        default="fragment_main"
+        help="Fragment 创建之前需要填写 Fragment 的布局名,若布局已创建就直接填写此布局名,若还没创建此布局,请勾选下面的单选框"
+        id="fragmentLayoutName"
+        suggest="fragment_${classToResource(pageName)}"
+        type="string"
+        visibility="needFragment" />
+
+
+    <parameter
+        name="Generate Fragment Layout"
+        default="true"
+        help="是否需要给 Fragment 生成布局? 若勾选,则使用上面的布局名给此 Fragment 创建默认的布局"
+        id="generateFragmentLayout"
+        type="boolean"
+        visibility="needFragment" />
+
+
+    <parameter
+        name="Fragment Package Name"
+        constraints="package"
+        help="Fragment 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+        id="fragmentPackageName"
+        suggest="${packageName}.view.fragment"
+        type="string"
+        visibility="needFragment" />
+
+
+<parameter
+        name = "Generate DataSourceRepository"
+        default = "true"
+        help = "是否需要生成 needDataSourceRepository ? 不勾选则不生成"
+        id = "needDataSourceRepository"
+        type = "boolean"/>
+
+    <parameter
+        name = "DataSourceRepository Package Name"
+        constraints = "package"
+        help= "DataSourceRepository 将被输出到此包下，请认真核实此包名是否是你需要输出的目标包名"
+        id="DataSourcePackageName"
+        suggest="${packageName}.data.source"
+        type="string"
+        visibility="needDataSourceRepository" />
+
+    <parameter 
+        name="DataSourceRepository class name" 
+        constraints="nonempty|class|unique" 
+        default="MyDataSourceRepository"
+        id="dataSourceRepositoryName" 
+        suggest="${extractLetters(pageName)}DataSourceRepository"
+        type="string" 
+        visibility="false" />
+
+    <parameter
+        name = "Generate RemoteDataSource"
+        default = "true"
+        help = "是否需要生成 RemoteDataSource ? 不勾选则不生成"
+        id = "needRemoteDataSource"
+        type = "boolean"/>
+
+    <parameter 
+        name="RemoteDataSource class name" 
+        constraints="nonempty|class|unique" 
+        default="MyRemoteDataSource"
+        id="remoteDataSourceName" 
+        suggest="${extractLetters(pageName)}RemoteDataSource"
+        type="string"
+        visibility="false" />
+
+    <parameter
+        name = "Generate LocalDataSource"
+        default = "false"
+        help = "是否需要生成 LocalDataSource ? 不勾选则不生成"
+        id = "needLocalDataSource"
+        type = "boolean"/>
+
+    <parameter 
+        name="LocalDataSource class name" 
+        constraints="nonempty|class|unique" 
+        default="MyLocalDataSource"
+        id="localDataSourceName" 
+        suggest="${extractLetters(pageName)}LocalDataSource"
+        type="string" 
+        visibility="false" />
+
+    <parameter
+        name="Generate ViewModel"
+        default="true"
+        help="是否需要生成 ViewModel ? 不勾选则不生成"
+        id="needViewModel"
+        type="boolean" />
+
+    <parameter
+        name="ViewModule Package Name"
+        constraints="package"
+        help="ViewModel 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+        id="VideModelPackageName"
+        suggest="${packageName}.viewmodel"
+        type="string"
+        visibility="needViewModel" />
+
+
+    <parameter
+        name="Generate DI module of Kodein"
+        default="true"
+        help="是否需要生成 Kodein Module组件? 不勾选则不生成"
+        id="needKodeinModule"
+        type="boolean" />
+
+    <parameter
+        name="Module Package Name"
+        constraints="package"
+        help="DI Module 将被输出到此包下,请认真核实此包名是否是你需要输出的目标包名"
+        id="ModulePackageName"
+        suggest="${packageName}.di"
+        type="string"
+        visibility="needKodeinModule" />
+
+
+    <!-- 128x128 thumbnails relative to template.xml -->
+    <thumbs>
+        <!-- default thumbnail is required -->
+        <thumb>template_blank_activity.png</thumb>
+    </thumbs>
+
+    <globals file="globals.xml.ftl" />
+    <execute file="recipe.xml.ftl" />
+
+</template>
